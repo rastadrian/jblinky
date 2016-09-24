@@ -13,6 +13,7 @@ public interface ProbeCallback {
 
     /**
      * A callback method to be invoked when a probe verification is completed.
+     *
      * @param statuses the list of status reports up until this current probe verification.
      */
     void onProbesUpdated(Map<String, Status> statuses);

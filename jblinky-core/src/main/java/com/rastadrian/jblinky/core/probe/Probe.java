@@ -9,12 +9,14 @@ package com.rastadrian.jblinky.core.probe;
 public interface Probe {
     /**
      * A unique name for the probe.
+     *
      * @return the probe's name
      */
     String getName();
 
     /**
      * Performs the verification of the probe. The process has to be synchronous and has to be return a {@link Status} report.
+     *
      * @return the {@link Status} report of the verification.
      */
     Status verify();

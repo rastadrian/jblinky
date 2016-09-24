@@ -22,7 +22,8 @@ public class DeviceRegister {
 
     /**
      * Matches the provided vendor and product ids to the register ones.
-     * @param vendorId the vendorId to verify.
+     *
+     * @param vendorId  the vendorId to verify.
      * @param productId the productId to verify.
      * @return true if the device matches, false otherwise.
      */

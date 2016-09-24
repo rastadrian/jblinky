@@ -19,10 +19,10 @@ import java.util.concurrent.TimeUnit;
  * @author Adrian Pena
  */
 public abstract class UsbLight extends UsbDevice implements Light {
+    private final ScheduledExecutorService scheduler;
     private Probe[] probes;
     private State currentState;
     private int warningCounter;
-    private final ScheduledExecutorService scheduler;
 
     public UsbLight() {
         scheduler = Executors.newScheduledThreadPool(1);
@@ -72,20 +72,21 @@ public abstract class UsbLight extends UsbDevice implements Light {
     }
 
     /**
+     * Retrieves the light probes, mostly for informational purposes.
+     *
+     * @return the list of probes assigned to this light.
+     */
+    protected Probe[] getProbes() {
+        return probes;
+    }
+
+    /**
      * Internally sets the jBlinky probes to the light while being created.
      *
      * @param probes the probes to be set.
      */
     void setProbes(Probe[] probes) {
         this.probes = probes;
-    }
-
-    /**
-     * Retrieves the light probes, mostly for informational purposes.
-     * @return the list of probes assigned to this light.
-     */
-    protected Probe[] getProbes() {
-        return probes;
     }
 
     private void performScheduledTask(Runnable runnable) {

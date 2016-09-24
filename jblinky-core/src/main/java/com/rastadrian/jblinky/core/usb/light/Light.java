@@ -44,7 +44,7 @@ public interface Light {
      * verification will move to the next probe, if its state is {@link State#FAILURE}, it will halt the verification
      * and stay on that probe until it gets resolved. For {@link State#WARNING} or {@link State#IN_PROGRESS} it will remain
      * on the state for an amount of time and then continue for the next probe.
-     *</p>
+     * </p>
      * <p>
      * This process will block the executor's thread.
      * </p>
@@ -58,7 +58,7 @@ public interface Light {
      * verification will move to the next probe, if its state is {@link State#FAILURE}, it will halt the verification
      * and stay on that probe until it gets resolved. For {@link State#WARNING} or {@link State#IN_PROGRESS} it will remain
      * on the state for an amount of time and then continue for the next probe.
-     *</p>
+     * </p>
      * <p>
      * The verification can also receive an optional {@link ProbeCallback} that will trigger {@link ProbeCallback#onProbesUpdated(Map)}
      * every time a probe is verified.
@@ -66,6 +66,7 @@ public interface Light {
      * <p>
      * This process will block the executor's thread.
      * </p>
+     *
      * @param probes the probes to verify.
      */
     void verifyProbes(Probe... probes);
@@ -77,7 +78,7 @@ public interface Light {
      * verification will move to the next probe, if its state is {@link State#FAILURE}, it will halt the verification
      * and stay on that probe until it gets resolved. For {@link State#WARNING} or {@link State#IN_PROGRESS} it will remain
      * on the state for an amount of time and then continue for the next probe.
-     *</p>
+     * </p>
      * <p>
      * The verification can also receive an optional {@link ProbeCallback} that will trigger {@link ProbeCallback#onProbesUpdated(Map)}
      * every time a probe is verified.
@@ -85,6 +86,7 @@ public interface Light {
      * <p>
      * This process will block the executor's thread.
      * </p>
+     *
      * @param callback an optional probe callback.
      */
     void verifyProbes(ProbeCallback callback);
@@ -96,7 +98,7 @@ public interface Light {
      * verification will move to the next probe, if its state is {@link State#FAILURE}, it will halt the verification
      * and stay on that probe until it gets resolved. For {@link State#WARNING} or {@link State#IN_PROGRESS} it will remain
      * on the state for an amount of time and then continue for the next probe.
-     *</p>
+     * </p>
      * <p>
      * The verification can also receive an optional {@link ProbeCallback} that will trigger {@link ProbeCallback#onProbesUpdated(Map)}
      * every time a probe is verified.
@@ -104,7 +106,8 @@ public interface Light {
      * <p>
      * This process will block the executor's thread.
      * </p>
-     * @param probes the probes to verify.
+     *
+     * @param probes   the probes to verify.
      * @param callback an optional probe callback.
      */
     void verifyProbes(Probe[] probes, ProbeCallback callback);
