@@ -1,0 +1,6 @@
+<Projects>
+    <Project activity="Sleeping" lastBuildStatus="Success" lastBuildLabel="104" webUrl="https://jenkins.com/job1/" name="job1" lastBuildTime="2016-09-20T01:40:17Z"/>
+    <Project activity="Sleeping" lastBuildStatus="Success" lastBuildLabel="215" webUrl="https://jenkins.com/job2/" name="job2" lastBuildTime="2016-09-20T23:44:00Z"/>
+    <Project activity="Sleeping" lastBuildStatus="Success" lastBuildLabel="126" webUrl="https://jenkins.com/job3/" name="job3" lastBuildTime="2016-09-20T19:05:47Z"/>
+    <Project activity="Sleeping" lastBuildStatus="Success" lastBuildLabel="7" webUrl="https://jenkins.com/job4/" name="job4" lastBuildTime="2016-09-15T20:19:00Z"/>
+</Projects>
