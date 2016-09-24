@@ -4,6 +4,8 @@ import com.rastadrian.jblinky.core.probe.Probe;
 import com.rastadrian.jblinky.core.usb.DeviceRegister;
 import com.rastadrian.jblinky.core.usb.UsbCommunicationHandle;
 import com.rastadrian.jblinky.core.usb.UsbDevice;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +16,8 @@ import java.util.List;
  * @author Adrian Pena
  */
 public class LightFactory {
+    private static final Logger LOGGER = LoggerFactory.getLogger(LightFactory.class);
+
     private final List<DeviceRegister> deviceRegisters;
     private final UsbCommunicationHandle handle;
     private final Probe[] probes;
@@ -31,13 +35,18 @@ public class LightFactory {
      * @return the list of found lights.
      */
     public List<Light> detectLights() {
-        List<Light> lights = new ArrayList<Light>();
-        List<UsbDevice> connectedUsbLights = handle.getConnectedUsbLights(deviceRegisters);
-        for (UsbDevice connectedUsbLight : connectedUsbLights) {
-            if(connectedUsbLight instanceof UsbLight) {
-                ((UsbLight) connectedUsbLight).setProbes(probes);
-                lights.add((Light) connectedUsbLight);
+        List<Light> lights = new ArrayList<>();
+        List<UsbDevice> usbDevices = handle.getConnectedUsbLights(deviceRegisters);
+        if (usbDevices.isEmpty()) {
+            LOGGER.error("No USB devices were found.");
+            throw new NoUsbDevicesFoundException();
+        }
+        for (UsbDevice usbDevice : usbDevices) {
+            if (usbDevice instanceof UsbLight) {
+                ((UsbLight) usbDevice).setProbes(probes);
+                lights.add((Light) usbDevice);
             } else {
+                LOGGER.error("An USB device matched a registered usb light specification, but such specification was not a UsbLight [{}]. The spec class has to extend UsbLight.", usbDevice.getClass().getSimpleName());
                 throw new NonUsbLightFoundException();
             }
         }

@@ -5,7 +5,7 @@ package com.rastadrian.jblinky.core.usb.light;
  *
  * @author Adrian Pena
  */
-class NonUsbLightFoundException extends RuntimeException {
+public class NonUsbLightFoundException extends RuntimeException {
 
     NonUsbLightFoundException() {
         super("An USB Specification was registered and found, but it is not a light.");
