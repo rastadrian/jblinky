@@ -36,7 +36,8 @@ public class NetworkUtil {
      * requested response class.
      * @param url the URL to get.
      * @param responseClass the class to serialize the response to.
-     * @param headers the request headers
+     * @param headers the request headers.
+     * @param <T> the class to serialize the response to.
      * @return the response.
      */
     public static <T> T get(String url, Class<T> responseClass, HttpHeaders headers) {

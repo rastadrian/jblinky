@@ -44,6 +44,7 @@ public class JBlinky {
      * connected lights.
      *
      * If usb lights are found, it will assign them the given probes.
+     * @param handle an USB communication handle protocol.
      * @param probes the list of probes that lights can verify.
      */
     public JBlinky(UsbCommunicationHandle handle, Probe... probes) {
@@ -54,6 +55,7 @@ public class JBlinky {
      * Creates a new jBlinky, it will scan the provided package for usb device specifications and will search for connected lights.
      *
      * The provided probes will be assigned to the found lights.
+     * @param handle an USB communication handle protocol
      * @param packageToScan the package to scan for usb device specifications.
      * @param probes the list of probes that lights can verify.
      */
@@ -78,6 +80,7 @@ public class JBlinky {
      * Creates a new jBlinky, it will search for connected lights with the provided usb device specifications.
      *
      * The provided probes will be assigned to the found lights.
+     * @param handle a USB communication handle protocol.
      * @param usbLightSpecifications the list of usb light specifications.
      * @param probes the list of probes that lights can verify.
      */
