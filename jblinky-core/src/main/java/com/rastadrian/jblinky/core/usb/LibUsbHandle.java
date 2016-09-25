@@ -30,16 +30,16 @@ public class LibUsbHandle implements UsbCommunicationHandle {
         DeviceList usbDevices = getDeviceList();
 
         if (usbDevices == null || usbDevices.getSize() == 0) {
-            LOGGER.warn("No connected USB lights were found.");
+            LOGGER.warn("No connected USB devices were found.");
             return foundDevices;
         }
-        LOGGER.info("USB devices found, searching for lights.");
+        LOGGER.info("USB devices found!, searching for devices that match the USB light specifications.");
         try {
             for (Device usbDevice : usbDevices) {
                 DeviceDescriptor descriptor = getDeviceDescriptor(usbDevice);
                 for (DeviceRegister registeredDevice : deviceRegisters) {
                     if (registeredDevice.matchesDevice(descriptor.idVendor(), descriptor.idProduct())) {
-                        LOGGER.info("Light found! [{}]", descriptor.getClass().getSimpleName());
+                        LOGGER.info("USB Light found! [{}]", registeredDevice.getDeviceClass().getSimpleName());
                         foundDevices.add(createDevice(usbDevice, registeredDevice));
                     }
                 }
@@ -80,7 +80,7 @@ public class LibUsbHandle implements UsbCommunicationHandle {
     private UsbDevice createDevice(Device usbDevice, DeviceRegister deviceRegister) {
         UsbDevice device = null;
         try {
-            LOGGER.debug("Creating new Usb device form spec [{}]", deviceRegister.getClass().getSimpleName());
+            LOGGER.debug("Creating new USB device from [{}] specification.", deviceRegister.getDeviceClass().getSimpleName());
             device = deviceRegister.getDeviceClass().newInstance();
             libUsbHandles.put(device, openDevice(usbDevice));
             device.setHandle(this);

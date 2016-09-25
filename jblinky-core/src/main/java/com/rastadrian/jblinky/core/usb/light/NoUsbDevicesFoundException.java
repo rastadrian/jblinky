@@ -8,6 +8,6 @@ package com.rastadrian.jblinky.core.usb.light;
 public class NoUsbDevicesFoundException extends RuntimeException {
 
     NoUsbDevicesFoundException() {
-        super("No compatible USB lights were found.");
+        super("No compatible USB devices were found.");
     }
 }

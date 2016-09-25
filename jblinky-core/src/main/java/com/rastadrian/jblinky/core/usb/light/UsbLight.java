@@ -4,6 +4,8 @@ import com.rastadrian.jblinky.core.probe.Probe;
 import com.rastadrian.jblinky.core.probe.State;
 import com.rastadrian.jblinky.core.probe.Status;
 import com.rastadrian.jblinky.core.usb.UsbDevice;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +21,8 @@ import java.util.concurrent.TimeUnit;
  * @author Adrian Pena
  */
 public abstract class UsbLight extends UsbDevice implements Light {
+    private static final Logger LOGGER = LoggerFactory.getLogger(UsbLight.class);
+
     private final ScheduledExecutorService scheduler;
     private Probe[] probes;
     private State currentState;
@@ -92,10 +96,8 @@ public abstract class UsbLight extends UsbDevice implements Light {
     private void performScheduledTask(Runnable runnable) {
         try {
             scheduler.scheduleWithFixedDelay(runnable, 1, 1, TimeUnit.SECONDS).get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+        } catch (InterruptedException | ExecutionException e) {
+            LOGGER.error("Performing scheduled task was interrupted.", e);
         }
     }
 
@@ -103,7 +105,7 @@ public abstract class UsbLight extends UsbDevice implements Light {
         try {
             Thread.sleep(seconds * 1000L);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            LOGGER.error("Process sleep was interrupted.", e);
         }
     }
 

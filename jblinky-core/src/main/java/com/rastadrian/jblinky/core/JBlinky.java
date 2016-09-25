@@ -142,15 +142,14 @@ public class JBlinky {
     }
 
     private void initialize(UsbCommunicationHandle handle, List<DeviceRegister> deviceRegisters, Probe[] probes) {
-        LOGGER.info("Initializing jBlinky with Usb Comm Handle [{}], [{}] Usb Light Specifications and [{}] global probes.", handle.getClass().getSimpleName(), deviceRegisters.size(), probes.length);
+        LOGGER.info("Initializing jBlinky with [{}] USB Handle, [{}] USB light specifications and [{}] global probes.", handle.getClass().getSimpleName(), deviceRegisters.size(), probes.length);
         lights = new LightFactory(deviceRegisters, handle, probes).detectLights();
     }
 
     private List<DeviceRegister> registerDevices(List<Class<? extends UsbLight>> devices) {
-        LOGGER.info("Registering [{}] usb light specifications", devices);
+        LOGGER.info("Registering [{}] as USB light specifications.", devices);
         List<DeviceRegister> registeredProviders = new ArrayList<DeviceRegister>();
         for (Class<? extends UsbLight> device : devices) {
-            LOGGER.debug("Registering [{}] usb light specification", device.getSimpleName());
             UsbRegistry registration = device.getAnnotation(UsbRegistry.class);
             registeredProviders.add(new DeviceRegister(registration.vendorId(), registration.productId(), device));
         }
@@ -158,7 +157,7 @@ public class JBlinky {
     }
 
     private List<Class<? extends UsbLight>> scanDevicePackage(String packageToScan) {
-        LOGGER.info("Scanning [{}] for UsbLight specifications.", packageToScan);
+        LOGGER.info("Scanning package [{}] for USB light specifications.", packageToScan);
         Reflections reflections = new Reflections(packageToScan);
         Set<Class<? extends UsbLight>> usbProviders = reflections.getSubTypesOf(UsbLight.class);
         return new ArrayList<>(usbProviders);

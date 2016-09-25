@@ -1,17 +1,22 @@
 package com.rastadrian.jblinky.core.usb;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * A physical electronic component that complies with the USB standard.
  *
  * @author Adrian Pena
  */
 public abstract class UsbDevice {
+    private static final Logger LOGGER = LoggerFactory.getLogger(UsbDevice.class);
     private UsbCommunicationHandle handle;
 
     /**
      * Disconnect from the USB Device communication bridge.
      */
     public void disconnect() {
+        LOGGER.debug("Disconnecting USB device [{}].", this.getClass().getSimpleName());
         handle.disconnect(this);
     }
 
