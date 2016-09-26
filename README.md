@@ -41,3 +41,6 @@ jBlinky currently supports this lights:
 * [DreamCheeky WebMail Notifier](http://dreamcheeky.com/webmail-notifier)
 
 It has only been tested on Mac OSX.
+
+## License
+This project is licensed under the OSI [MIT License](https://opensource.org/licenses/MIT).
