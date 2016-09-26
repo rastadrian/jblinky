@@ -141,6 +141,14 @@ public class JBlinky {
         lights.clear();
     }
 
+    /**
+     * Registers a shutdown hook {@link Runtime#addShutdownHook(Thread)} on the Java Runtime.
+     */
+    public void registerShutdownHook() {
+        LOGGER.info("Registering a Runtime shutdown hook to disconnect jBlinky upon process interruption.");
+        Runtime.getRuntime().addShutdownHook(new Thread(new JBlinkyDisconnector(this)));
+    }
+
     private void initialize(UsbCommunicationHandle handle, List<DeviceRegister> deviceRegisters, Probe[] probes) {
         LOGGER.info("Initializing jBlinky with [{}] USB Handle, [{}] USB light specifications and [{}] global probes.", handle.getClass().getSimpleName(), deviceRegisters.size(), probes.length);
         lights = new LightFactory(deviceRegisters, handle, probes).detectLights();
@@ -161,5 +169,20 @@ public class JBlinky {
         Reflections reflections = new Reflections(packageToScan);
         Set<Class<? extends UsbLight>> usbProviders = reflections.getSubTypesOf(UsbLight.class);
         return new ArrayList<>(usbProviders);
+    }
+
+    private class JBlinkyDisconnector implements Runnable {
+        private final JBlinky instance;
+
+        private JBlinkyDisconnector(JBlinky instance) {
+            this.instance = instance;
+        }
+
+        @Override
+        public void run() {
+            if(instance != null) {
+                instance.close();
+            }
+        }
     }
 }
