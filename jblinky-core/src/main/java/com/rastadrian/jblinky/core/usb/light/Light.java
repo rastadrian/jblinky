@@ -103,14 +103,15 @@ public interface Light {
      * The verification can also receive an optional {@link ProbeCallback} that will trigger {@link ProbeCallback#onProbesUpdated(Map)}
      * every time a probe is verified.
      * </p>
+     * This process can receive {@link Probe}s which will override the current Light probes.
      * <p>
      * This process will block the executor's thread.
      * </p>
      *
-     * @param probes   the probes to verify.
      * @param callback an optional probe callback.
+     * @param probes   the probes to verify.
      */
-    void verifyProbes(Probe[] probes, ProbeCallback callback);
+    void verifyProbes(ProbeCallback callback, Probe... probes);
 
     /**
      * Turns off and disconnects from the usb light.
