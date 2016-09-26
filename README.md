@@ -13,7 +13,7 @@ The project is contained in three main modules:
 * `jblinky-devices` is a collection of USB Light specifications from different vendors and manufacturers.
 * `jblinky-probes` is a collection of various Probes that can be verified by jBlinky lights.
 
-Needless to say, you are always able to create, provide and use your own devices and probes.
+Needless to say, you are always able to create, provide and use your own [custom devices](https://github.com/rastadrian/jblinky/wiki/USB-Devices#create-your-own-usb-light-specification) and [custom probes](https://github.com/rastadrian/jblinky/wiki/Probes#custom-probes).
 
 ## How to use?
 
