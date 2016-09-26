@@ -65,7 +65,7 @@ public class JBlinky {
      * @param packageToScan the package to scan for usb device specifications.
      * @param probes        the list of probes that lights can verify.
      */
-    public JBlinky(String packageToScan, Probe[] probes) {
+    public JBlinky(String packageToScan, Probe... probes) {
         List<Class<? extends UsbLight>> lightDevices = scanDevicePackage(packageToScan);
         List<DeviceRegister> deviceRegisters = registerDevices(lightDevices);
         initialize(new LibUsbHandle(), deviceRegisters, probes);
