@@ -40,7 +40,10 @@ jBlinky currently supports this lights:
 * [Delcom Gen2 Usb Light](https://www.delcomproducts.com/productdetails.asp?productnum=904008)
 * [DreamCheeky WebMail Notifier](http://dreamcheeky.com/webmail-notifier)
 
-It has only been tested on Mac OSX.
+It support and has been tested on:
+
+* Mac OSX
+* MS Windows (tested on 8.1).
 
 ## License
 This project is licensed under the OSI [MIT License](https://opensource.org/licenses/MIT).
