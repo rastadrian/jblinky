@@ -65,7 +65,7 @@ public class JBlinky {
      * @param packageToScan the package to scan for usb device specifications.
      * @param probes        the list of probes that lights can verify.
      */
-    public JBlinky(String packageToScan, Probe[] probes) {
+    public JBlinky(String packageToScan, Probe... probes) {
         List<Class<? extends UsbLight>> lightDevices = scanDevicePackage(packageToScan);
         List<DeviceRegister> deviceRegisters = registerDevices(lightDevices);
         initialize(new LibUsbHandle(), deviceRegisters, probes);
@@ -80,7 +80,7 @@ public class JBlinky {
      * @param packageToScan the package to scan for usb device specifications.
      * @param probes        the list of probes that lights can verify.
      */
-    public JBlinky(UsbCommunicationHandle handle, String packageToScan, Probe[] probes) {
+    public JBlinky(UsbCommunicationHandle handle, String packageToScan, Probe... probes) {
         List<Class<? extends UsbLight>> lightDevices = scanDevicePackage(packageToScan);
         List<DeviceRegister> deviceRegisters = registerDevices(lightDevices);
         initialize(handle, deviceRegisters, probes);
@@ -94,7 +94,7 @@ public class JBlinky {
      * @param usbLightSpecifications the list of usb light specifications.
      * @param probes                 the list of probes that lights can verify.
      */
-    public JBlinky(List<Class<? extends UsbLight>> usbLightSpecifications, Probe[] probes) {
+    public JBlinky(List<Class<? extends UsbLight>> usbLightSpecifications, Probe... probes) {
         this(new LibUsbHandle(), usbLightSpecifications, probes);
     }
 
@@ -107,7 +107,7 @@ public class JBlinky {
      * @param usbLightSpecifications the list of usb light specifications.
      * @param probes                 the list of probes that lights can verify.
      */
-    public JBlinky(UsbCommunicationHandle handle, List<Class<? extends UsbLight>> usbLightSpecifications, Probe[] probes) {
+    public JBlinky(UsbCommunicationHandle handle, List<Class<? extends UsbLight>> usbLightSpecifications, Probe... probes) {
         List<DeviceRegister> deviceRegisters = registerDevices(usbLightSpecifications);
         initialize(handle, deviceRegisters, probes);
     }
@@ -148,7 +148,7 @@ public class JBlinky {
 
     private List<DeviceRegister> registerDevices(List<Class<? extends UsbLight>> devices) {
         LOGGER.info("Registering [{}] as USB light specifications.", devices);
-        List<DeviceRegister> registeredProviders = new ArrayList<DeviceRegister>();
+        List<DeviceRegister> registeredProviders = new ArrayList<>();
         for (Class<? extends UsbLight> device : devices) {
             UsbRegistry registration = device.getAnnotation(UsbRegistry.class);
             registeredProviders.add(new DeviceRegister(registration.vendorId(), registration.productId(), device));

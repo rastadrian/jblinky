@@ -33,14 +33,14 @@ public abstract class UsbLight extends UsbDevice implements Light {
     }
 
     public void verifyProbes() {
-        verifyProbes(this.probes, null);
+        verifyProbes(null, this.probes);
     }
 
     public void verifyProbes(Probe... probes) {
-        verifyProbes(probes, null);
+        verifyProbes(null, probes);
     }
 
-    public void verifyProbes(Probe[] probes, ProbeCallback callback) {
+    public void verifyProbes(ProbeCallback callback, Probe... probes) {
         this.probes = probes;
         verifyProbes(callback);
     }
