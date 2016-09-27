@@ -6,6 +6,13 @@ The library is not only tied to CI job builds however, it also provides differen
 
 For use cases, documentation and more details, please visit the [jBlinky Wiki](https://github.com/rastadrian/jblinky/wiki) site.
 
+## Project Status
+
+| ------- | ----: |
+| Develop | [![Build Status](https://travis-ci.org/rastadrian/jblinky.svg?branch=develop)](https://travis-ci.org/rastadrian/jblinky) |
+
+
+
 ## Getting started
 
 The project is contained in three main modules: 
