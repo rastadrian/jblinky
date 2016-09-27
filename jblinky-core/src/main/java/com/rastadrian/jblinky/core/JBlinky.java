@@ -148,7 +148,7 @@ public class JBlinky {
 
     private List<DeviceRegister> registerDevices(List<Class<? extends UsbLight>> devices) {
         LOGGER.info("Registering [{}] as USB light specifications.", devices);
-        List<DeviceRegister> registeredProviders = new ArrayList<DeviceRegister>();
+        List<DeviceRegister> registeredProviders = new ArrayList<>();
         for (Class<? extends UsbLight> device : devices) {
             UsbRegistry registration = device.getAnnotation(UsbRegistry.class);
             registeredProviders.add(new DeviceRegister(registration.vendorId(), registration.productId(), device));
