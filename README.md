@@ -8,8 +8,9 @@ For use cases, documentation and more details, please visit the [jBlinky Wiki](h
 
 ## Project Status
 
-| ------- | ----: |
-| Develop | [![Build Status](https://travis-ci.org/rastadrian/jblinky.svg?branch=develop)](https://travis-ci.org/rastadrian/jblinky) |
+| Component | Status |
+| ------ | ------ |
+| develop | [![Build Status](https://travis-ci.org/rastadrian/jblinky.svg?branch=develop)](https://travis-ci.org/rastadrian/jblinky) |
 
 
 
