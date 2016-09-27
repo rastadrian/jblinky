@@ -32,19 +32,23 @@ public abstract class UsbLight extends UsbDevice implements Light {
         scheduler = Executors.newScheduledThreadPool(1);
     }
 
+    @Override
     public void verifyProbes() {
         verifyProbes(null, this.probes);
     }
 
+    @Override
     public void verifyProbes(Probe... probes) {
         verifyProbes(null, probes);
     }
 
+    @Override
     public void verifyProbes(ProbeCallback callback, Probe... probes) {
         this.probes = probes;
         verifyProbes(callback);
     }
 
+    @Override
     public void verifyProbes(final ProbeCallback callback) {
         performScheduledTask(new Runnable() {
             public void run() {
@@ -67,9 +71,36 @@ public abstract class UsbLight extends UsbDevice implements Light {
         });
     }
 
+    @Override
+    public void findMe() {
+        for (int i = 0; i < 10; i++) {
+            success();
+            sleep(1);
+            failure();
+            sleep(1);
+        }
+        off();
+    }
+
+    @Override
+    public void test() {
+        for (int i = 0; i < 3; i++) {
+            success();
+            sleep(1);
+            inProgress();
+            sleep(1);
+            warning();
+            sleep(1);
+            failure();
+            sleep(1);
+        }
+        off();
+    }
+
     /**
      * Turns off and disconnects from the usb light.
      */
+    @Override
     public void disconnect() {
         off();
         super.disconnect();
