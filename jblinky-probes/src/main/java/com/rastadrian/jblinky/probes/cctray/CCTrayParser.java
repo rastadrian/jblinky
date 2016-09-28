@@ -1,6 +1,8 @@
 package com.rastadrian.jblinky.probes.cctray;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -10,7 +12,6 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,14 +21,16 @@ import java.util.List;
  * @author Adrian Pena
  */
 class CCTrayParser {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CCTrayParser.class);
 
     /**
      * De-serializes a Cruise Control Tray.
+     *
      * @param content the serialized CC Tray.
      * @return a de-serialized {@link CCTray} object.
      */
     static CCTray parseCCTray(String content) {
-        if(StringUtils.isBlank(content)) {
+        if (StringUtils.isBlank(content)) {
             return null;
         }
         try {
@@ -36,14 +39,8 @@ class CCTrayParser {
             SAXParser saxParser = factory.newSAXParser();
             saxParser.parse(new ByteArrayInputStream(content.getBytes("UTF-8")), handler);
             return handler.getCCTray();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            LOGGER.error("An XML SAX parsing error occurred.", e);
         }
         return null;
     }
@@ -52,13 +49,13 @@ class CCTrayParser {
         private final List<Project> projects;
 
         private CCTrayHandler() {
-            projects = new ArrayList<Project>();
+            projects = new ArrayList<>();
         }
 
         @Override
         public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
             super.startElement(uri, localName, qName, attributes);
-            if(StringUtils.equals(qName, "Project")) {
+            if (StringUtils.equals(qName, "Project")) {
                 String name = attributes.getValue("name");
                 String lastBuildStatus = attributes.getValue("lastBuildStatus");
                 projects.add(new Project(name, lastBuildStatus));
