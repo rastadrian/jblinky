@@ -14,7 +14,7 @@ public class CCTrayParserTest {
 
     @Test
     public void parseCCTray() throws Exception {
-        String jenkinsCCTray = TestUtil.readResource(this, "/cctray/JenkinsCCTray.xml");
+        String jenkinsCCTray = TestUtil.readResource(this, "/cctray/jenkins-cctray-all-successful.xml");
         CCTray ccTray = CCTrayParser.parseCCTray(jenkinsCCTray);
         assertThat(ccTray).isNotNull();
         assertThat(ccTray.getProjects()).isNotNull();
