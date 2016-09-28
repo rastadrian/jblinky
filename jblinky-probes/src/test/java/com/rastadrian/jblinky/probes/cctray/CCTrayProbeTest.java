@@ -2,27 +2,30 @@ package com.rastadrian.jblinky.probes.cctray;
 
 import com.rastadrian.jblinky.core.probe.State;
 import com.rastadrian.jblinky.core.probe.Status;
-import com.rastadrian.jblinky.probes.NetworkUtil;
+import com.rastadrian.jblinky.probes.NetworkHandle;
 import com.rastadrian.jblinky.probes.TestUtil;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.http.HttpHeaders;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 /**
  * Created by adrian on 9/27/16.
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({NetworkUtil.class, CCTrayProbe.class})
 public class CCTrayProbeTest {
 
     private CCTrayProbe trayProbe;
+    private NetworkHandle networkHandle;
+
+    @Before
+    public void setUp() throws Exception {
+        networkHandle = mock(NetworkHandle.class);
+
+    }
 
     @Test
     public void getName_withDefaultName() throws Exception {
@@ -56,10 +59,10 @@ public class CCTrayProbeTest {
         Status statusReport;
         given:
         {
-            mockStatic(NetworkUtil.class);
             String jenkinsCCTray = TestUtil.readResource(this, "/cctray/jenkins-cctray-all-successful.xml");
-            when(NetworkUtil.get(anyString(), eq(String.class), any(HttpHeaders.class))).thenReturn(jenkinsCCTray);
+            when(networkHandle.get(anyString(), eq(String.class), any(HttpHeaders.class))).thenReturn(jenkinsCCTray);
             trayProbe = new CCTrayProbe("url", new String[]{"job1"});
+            trayProbe.setNetworkHandle(networkHandle);
         }
         when:
         {
@@ -77,10 +80,10 @@ public class CCTrayProbeTest {
         Status statusReport;
         given:
         {
-            mockStatic(NetworkUtil.class);
             String jenkinsCCTray = TestUtil.readResource(this, "/cctray/jenkins-cctray-job1-failure.xml");
-            when(NetworkUtil.get(anyString(), eq(String.class), any(HttpHeaders.class))).thenReturn(jenkinsCCTray);
+            when(networkHandle.get(anyString(), eq(String.class), any(HttpHeaders.class))).thenReturn(jenkinsCCTray);
             trayProbe = new CCTrayProbe("url", new String[]{"job1"});
+            trayProbe.setNetworkHandle(networkHandle);
         }
         when:
         {
@@ -98,9 +101,9 @@ public class CCTrayProbeTest {
         Status statusReport;
         given:
         {
-            mockStatic(NetworkUtil.class);
-            when(NetworkUtil.get(anyString(), eq(String.class), any(HttpHeaders.class))).thenReturn(null);
+            when(networkHandle.get(anyString(), eq(String.class), any(HttpHeaders.class))).thenReturn(null);
             trayProbe = new CCTrayProbe("url", new String[]{"job1"});
+            trayProbe.setNetworkHandle(networkHandle);
         }
         when:
         {
@@ -120,14 +123,15 @@ public class CCTrayProbeTest {
         String password;
         given:
         {
-            mockStatic(NetworkUtil.class);
+
             username = "username";
             password = "password";
             String jenkinsCCTray = TestUtil.readResource(this, "/cctray/jenkins-cctray-all-successful.xml");
             HttpHeaders authenticationHeaders = new HttpHeaders();
-            when(NetworkUtil.createHeaders(eq(username), eq(password))).thenReturn(authenticationHeaders);
-            when(NetworkUtil.get(anyString(), eq(String.class), eq(authenticationHeaders))).thenReturn(jenkinsCCTray);
+            when(networkHandle.createHeaders(eq(username), eq(password))).thenReturn(authenticationHeaders);
+            when(networkHandle.get(anyString(), eq(String.class), eq(authenticationHeaders))).thenReturn(jenkinsCCTray);
             trayProbe = new CCTrayProbe("url", username, password, new String[]{"job1"});
+            trayProbe.setNetworkHandle(networkHandle);
         }
         when:
         {
