@@ -34,7 +34,8 @@ public class LightFactoryTest {
         List<Light> foundLights;
         UsbLightDevice lightDevice;
         Probe[] probes;
-        given: {
+        given:
+        {
             probes = new Probe[]{};
             lightFactory = new LightFactory(null, handle, probes);
             lightDevice = new UsbLightDevice();
@@ -42,10 +43,12 @@ public class LightFactoryTest {
             deviceList.add(lightDevice);
             when(handle.getConnectedUsbLights(any(List.class))).thenReturn(deviceList);
         }
-        when: {
+        when:
+        {
             foundLights = lightFactory.detectLights();
         }
-        then: {
+        then:
+        {
             assertThat(foundLights).contains(lightDevice);
             assertThat(foundLights.get(0)).isEqualTo(lightDevice);
             assertThat(((UsbLight) foundLights.get(0)).getProbes()).contains(probes);
@@ -55,15 +58,31 @@ public class LightFactoryTest {
 
     @Test(expected = NonUsbLightFoundException.class)
     public void detectLights_withNonLightRegistries() throws Exception {
-        given: {
+        given:
+        {
             lightFactory = new LightFactory(null, handle, null);
             List<UsbDevice> deviceList = new ArrayList<UsbDevice>();
             deviceList.add(new NonUsbLightDevice());
             when(handle.getConnectedUsbLights(any(List.class))).thenReturn(deviceList);
         }
-        when: {
+        when:
+        {
             lightFactory.detectLights();
         }
+    }
+
+    @Test(expected = NoUsbDevicesFoundException.class)
+    public void detectLights_withNoDevicesFound() throws Exception {
+        given:
+        {
+            lightFactory = new LightFactory(null, handle, null);
+            when(handle.getConnectedUsbLights(any(List.class))).thenReturn(new ArrayList<UsbDevice>());
+        }
+        when:
+        {
+            lightFactory.detectLights();
+        }
+
     }
 
     private class UsbLightDevice extends UsbLight {
