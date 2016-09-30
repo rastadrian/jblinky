@@ -35,6 +35,38 @@ public class UsbLightTest {
     }
 
     @Test
+    public void lightTest() throws Exception {
+        when:
+        {
+            usbLight.setHandle(mock(UsbCommunicationHandle.class));
+            usbLight.test();
+        }
+        then:
+        {
+            verify(usbLight, times(3)).success();
+            verify(usbLight, times(3)).inProgress();
+            verify(usbLight, times(3)).warning();
+            verify(usbLight, times(3)).failure();
+            verify(usbLight, times(1)).off();
+        }
+    }
+
+    @Test
+    public void findMe() throws Exception {
+        when:
+        {
+            usbLight.setHandle(mock(UsbCommunicationHandle.class));
+            usbLight.findMe();
+        }
+        then:
+        {
+            verify(usbLight, times(10)).success();
+            verify(usbLight, times(10)).failure();
+            verify(usbLight, times(1)).off();
+        }
+    }
+
+    @Test
     public void explicitProbeSetting() throws Exception {
         Probe[] probes;
         Probe[] receivedProbes;

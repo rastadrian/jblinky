@@ -38,6 +38,16 @@ public interface Light {
     void off();
 
     /**
+     * Provides a long intermittent pattern so you can locate a light.
+     */
+    void findMe();
+
+    /**
+     * Tests the light's connection. This should iterate through all the light states then turn off.
+     */
+    void test();
+
+    /**
      * It will iterate and verify all the light probes.
      * <p>
      * If the a probe's verification turns {@link State#SUCCESS} the
