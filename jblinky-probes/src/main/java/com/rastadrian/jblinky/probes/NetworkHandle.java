@@ -5,19 +5,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.util.Base64Utils;
 import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestOperations;
 
 /**
  * A Network utility class to encapsulate the usage of Spring's Rest Template.
  *
  * @author Adrian Pena
  */
-public class NetworkUtil {
-    private static final Logger LOGGER = LoggerFactory.getLogger(NetworkUtil.class);
-    private static final int NETWORK_TIME_OUT_MILLIS = 3000;
+public class NetworkHandle {
+    private static final Logger LOGGER = LoggerFactory.getLogger(NetworkHandle.class);
+    private final RestOperations restOperations;
+
+    public NetworkHandle(RestOperations restOperations) {
+        this.restOperations = restOperations;
+    }
 
     /**
      * Creates headers including a Basic Authentication one.
@@ -26,7 +29,7 @@ public class NetworkUtil {
      * @param password the credential's password
      * @return the HttpHeaders including an encoded Basic Auth header.
      */
-    public static HttpHeaders createHeaders(final String username, final String password) {
+    public HttpHeaders createHeaders(final String username, final String password) {
         return new HttpHeaders() {{
             String auth = username + ":" + password;
             String encodedAuth = Base64Utils.encodeToString(auth.getBytes());
@@ -45,13 +48,9 @@ public class NetworkUtil {
      * @param <T>           the class to serialize the response to.
      * @return the de-serialized response.
      */
-    public static <T> T get(String url, Class<T> responseClass, HttpHeaders headers) {
+    public <T> T get(String url, Class<T> responseClass, HttpHeaders headers) {
         try {
-            RestTemplate template = new RestTemplate();
-            SimpleClientHttpRequestFactory factory = (SimpleClientHttpRequestFactory) template.getRequestFactory();
-            factory.setConnectTimeout(NETWORK_TIME_OUT_MILLIS);
-            factory.setReadTimeout(NETWORK_TIME_OUT_MILLIS);
-            return template.exchange(url, HttpMethod.GET, new HttpEntity(headers), responseClass).getBody();
+            return restOperations.exchange(url, HttpMethod.GET, new HttpEntity(headers), responseClass).getBody();
         } catch (RestClientException e) {
             LOGGER.info("A RestClient exception occurred while attempting a GET request.", e);
         }

@@ -3,12 +3,15 @@ package com.rastadrian.jblinky.probes.cctray;
 import com.rastadrian.jblinky.core.probe.Probe;
 import com.rastadrian.jblinky.core.probe.State;
 import com.rastadrian.jblinky.core.probe.Status;
-import com.rastadrian.jblinky.probes.NetworkUtil;
+import com.rastadrian.jblinky.probes.NetworkHandle;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.web.client.RestOperations;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,12 +24,14 @@ import java.util.List;
 public class CCTrayProbe implements Probe {
     private static final Logger LOGGER = LoggerFactory.getLogger(CCTrayProbe.class);
     private static final String DEFAULT_NAME_FORMAT = "CC Tray Probe [%s]";
+    private static final int NETWORK_TIME_OUT_MILLIS = 3000;
 
     private final String name;
     private final String url;
     private final String username;
     private final String password;
     private final String[] jobs;
+    private NetworkHandle networkHandle;
 
     /**
      * Creates an unauthenticated CCTray Probe that monitors the provided jobs.
@@ -77,6 +82,7 @@ public class CCTrayProbe implements Probe {
         this.password = password;
         this.jobs = jobs;
         this.name = name;
+        this.networkHandle = new NetworkHandle(createCCTrayNetworkOperator());
     }
 
     public String getName() {
@@ -90,11 +96,11 @@ public class CCTrayProbe implements Probe {
         State state = State.SUCCESS;
         if (StringUtils.isNotEmpty(username) && StringUtils.isNotEmpty(password)) {
             LOGGER.debug("CCTray Probe [{}]: Using basic authentication.", name);
-            headers = NetworkUtil.createHeaders(username, password);
+            headers = networkHandle.createHeaders(username, password);
         } else {
             headers = new HttpHeaders();
         }
-        String content = NetworkUtil.get(url, String.class, headers);
+        String content = networkHandle.get(url, String.class, headers);
         CCTray ccTray = CCTrayParser.parseCCTray(content);
         if (ccTray == null) {
             LOGGER.warn("CCTray Probe [{}]: Unable to retrieve CCTray.", name);
@@ -111,5 +117,17 @@ public class CCTrayProbe implements Probe {
         }
         LOGGER.debug("CCTray Probe [{}]: Verification complete, returning state [{}]", name, state);
         return new Status(state, messages.toArray(new String[messages.size()]));
+    }
+
+    public void setNetworkHandle(NetworkHandle networkHandle) {
+        this.networkHandle = networkHandle;
+    }
+
+    private RestOperations createCCTrayNetworkOperator() {
+        RestTemplate restTemplate = new RestTemplate();
+        SimpleClientHttpRequestFactory factory = (SimpleClientHttpRequestFactory) restTemplate.getRequestFactory();
+        factory.setConnectTimeout(NETWORK_TIME_OUT_MILLIS);
+        factory.setReadTimeout(NETWORK_TIME_OUT_MILLIS);
+        return restTemplate;
     }
 }

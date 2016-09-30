@@ -1,5 +1,6 @@
 package com.rastadrian.jblinky.devices;
 
+import com.rastadrian.jblinky.core.usb.UsbCommunicationHandle;
 import com.rastadrian.jblinky.core.usb.UsbRegistry;
 import com.rastadrian.jblinky.core.usb.light.UsbLight;
 import org.apache.commons.lang3.ArrayUtils;
@@ -12,7 +13,9 @@ import org.apache.commons.lang3.ArrayUtils;
 @UsbRegistry(vendorId = 0x1d34, productId = 0x0004)
 public class WebMailNotifier extends UsbLight {
 
-    public WebMailNotifier() {
+    @Override
+    public void setHandle(UsbCommunicationHandle handle) {
+        super.setHandle(handle);
         sendMessage(new byte[]{0x1f, 0x02, 0x00, 0x2e, 0x00, 0x00, 0x2b, 0x03});
         sendMessage(new byte[]{0x00, 0x02, 0x00, 0x2e, 0x00, 0x00, 0x2b, 0x04});
         sendMessage(new byte[]{0x00, 0x00, 0x00, 0x2e, 0x00, 0x00, 0x2b, 0x05});
