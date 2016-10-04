@@ -1,6 +1,5 @@
 package com.rastadrian.jblinky.core;
 
-import com.rastadrian.jblinky.core.probe.Probe;
 import com.rastadrian.jblinky.core.usb.UsbCommunicationHandle;
 import com.rastadrian.jblinky.core.usb.UsbDevice;
 import com.rastadrian.jblinky.core.usb.UsbRegistry;
@@ -10,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
@@ -37,18 +35,21 @@ public class JBlinkyTest {
         TestLightDevice firstLight;
         TestLightDevice secondLight;
         Light light;
-        given: {
+        given:
+        {
             firstLight = new TestLightDevice();
             secondLight = new TestLightDevice();
             mockHandleConnectedUsbLights(firstLight, secondLight);
             List<Class<? extends UsbLight>> lightSpecs = new ArrayList<Class<? extends UsbLight>>();
             lightSpecs.add(TestLightDevice.class);
-            jBlinky = new JBlinky(handle, lightSpecs, new Probe[]{});
+            jBlinky = new JBlinky(handle, lightSpecs);
         }
-        when: {
+        when:
+        {
             light = jBlinky.getLight();
         }
-        then: {
+        then:
+        {
             assertThat(light).isEqualTo(firstLight);
         }
     }
@@ -58,16 +59,19 @@ public class JBlinkyTest {
         TestLightDevice firstLight;
         TestLightDevice secondLight;
         List<Light> lights;
-        given: {
+        given:
+        {
             firstLight = new TestLightDevice();
             secondLight = new TestLightDevice();
             mockHandleConnectedUsbLights(firstLight, secondLight);
             jBlinky = new JBlinky(handle);
         }
-        when: {
+        when:
+        {
             lights = jBlinky.getLights();
         }
-        then: {
+        then:
+        {
             assertThat(lights).contains(firstLight, secondLight);
         }
     }
@@ -76,7 +80,8 @@ public class JBlinkyTest {
     public void close() throws Exception {
         TestLightDevice firstLight;
         TestLightDevice secondLight;
-        given: {
+        given:
+        {
             firstLight = spy(new TestLightDevice());
             firstLight.setHandle(handle);
             secondLight = new TestLightDevice();
@@ -84,11 +89,13 @@ public class JBlinkyTest {
             mockHandleConnectedUsbLights(firstLight, secondLight);
             jBlinky = new JBlinky(handle);
         }
-        when: {
+        when:
+        {
             assertThat(jBlinky.getLights()).contains(firstLight, secondLight);
             jBlinky.close();
         }
-        then: {
+        then:
+        {
             assertThat(jBlinky.getLights()).isEmpty();
             verify(firstLight, times(1)).disconnect();
         }

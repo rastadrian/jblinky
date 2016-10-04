@@ -1,6 +1,5 @@
 package com.rastadrian.jblinky.core.usb.light;
 
-import com.rastadrian.jblinky.core.probe.Probe;
 import com.rastadrian.jblinky.core.usb.DeviceRegister;
 import com.rastadrian.jblinky.core.usb.UsbCommunicationHandle;
 import com.rastadrian.jblinky.core.usb.UsbDevice;
@@ -20,12 +19,10 @@ public class LightFactory {
 
     private final List<DeviceRegister> deviceRegisters;
     private final UsbCommunicationHandle handle;
-    private final Probe[] probes;
 
-    public LightFactory(List<DeviceRegister> deviceRegisters, UsbCommunicationHandle handle, Probe[] probes) {
+    public LightFactory(List<DeviceRegister> deviceRegisters, UsbCommunicationHandle handle) {
         this.deviceRegisters = deviceRegisters;
         this.handle = handle;
-        this.probes = probes;
     }
 
     /**
@@ -43,7 +40,6 @@ public class LightFactory {
         }
         for (UsbDevice usbDevice : usbDevices) {
             if (usbDevice instanceof UsbLight) {
-                ((UsbLight) usbDevice).setProbes(probes);
                 lights.add((Light) usbDevice);
             } else {
                 LOGGER.error("An USB device matched a registered usb light specification, but such specification was not a UsbLight [{}]. The spec class has to extend UsbLight.", usbDevice.getClass().getSimpleName());

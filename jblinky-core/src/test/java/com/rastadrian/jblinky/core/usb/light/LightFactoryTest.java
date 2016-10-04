@@ -1,6 +1,5 @@
 package com.rastadrian.jblinky.core.usb.light;
 
-import com.rastadrian.jblinky.core.probe.Probe;
 import com.rastadrian.jblinky.core.usb.UsbCommunicationHandle;
 import com.rastadrian.jblinky.core.usb.UsbDevice;
 import org.junit.Before;
@@ -33,11 +32,9 @@ public class LightFactoryTest {
     public void detectLights() throws Exception {
         List<Light> foundLights;
         UsbLightDevice lightDevice;
-        Probe[] probes;
         given:
         {
-            probes = new Probe[]{};
-            lightFactory = new LightFactory(null, handle, probes);
+            lightFactory = new LightFactory(null, handle);
             lightDevice = new UsbLightDevice();
             List<UsbDevice> deviceList = new ArrayList<UsbDevice>();
             deviceList.add(lightDevice);
@@ -51,7 +48,7 @@ public class LightFactoryTest {
         {
             assertThat(foundLights).contains(lightDevice);
             assertThat(foundLights.get(0)).isEqualTo(lightDevice);
-            assertThat(((UsbLight) foundLights.get(0)).getProbes()).contains(probes);
+            assertThat(((UsbLight) foundLights.get(0)).getProbes()).isNull();
         }
     }
 
@@ -60,7 +57,7 @@ public class LightFactoryTest {
     public void detectLights_withNonLightRegistries() throws Exception {
         given:
         {
-            lightFactory = new LightFactory(null, handle, null);
+            lightFactory = new LightFactory(null, handle);
             List<UsbDevice> deviceList = new ArrayList<UsbDevice>();
             deviceList.add(new NonUsbLightDevice());
             when(handle.getConnectedUsbLights(any(List.class))).thenReturn(deviceList);
@@ -75,7 +72,7 @@ public class LightFactoryTest {
     public void detectLights_withNoDevicesFound() throws Exception {
         given:
         {
-            lightFactory = new LightFactory(null, handle, null);
+            lightFactory = new LightFactory(null, handle);
             when(handle.getConnectedUsbLights(any(List.class))).thenReturn(new ArrayList<UsbDevice>());
         }
         when:
