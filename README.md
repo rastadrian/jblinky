@@ -1,7 +1,7 @@
 # jBlinky
 [![Build Status](https://travis-ci.org/rastadrian/jblinky.svg?branch=develop)](https://travis-ci.org/rastadrian/jblinky) [![Coverage Status](https://coveralls.io/repos/github/rastadrian/jblinky/badge.svg?branch=develop)](https://coveralls.io/github/rastadrian/jblinky?branch=develop) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
 
-jBlinky is an easy-to-configure Java library to set up CI build lights. It started as a Java port of [Perryn Fowler's](https://github.com/perryn) [blinky](https://github.com/perryn/blinky) project.
+jBlinky is an easy-to-configure Java library to set up CI build lights. It started as a Java port of [Perryn Fowler](https://github.com/perryn)'s [blinky](https://github.com/perryn/blinky) project.
 
 The library is not only tied to CI job builds however, it also provides different types of `Probe` implementations and allows you to create your own!
 
