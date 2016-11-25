@@ -4,6 +4,7 @@ import com.rastadrian.jblinky.core.usb.UsbCommunicationHandle;
 import com.rastadrian.jblinky.core.usb.UsbDevice;
 import com.rastadrian.jblinky.core.usb.UsbRegistry;
 import com.rastadrian.jblinky.core.usb.light.Light;
+import com.rastadrian.jblinky.core.usb.light.NoUsbDevicesFoundException;
 import com.rastadrian.jblinky.core.usb.light.UsbLight;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,6 +29,22 @@ public class JBlinkyTest {
     @Before
     public void setUp() throws Exception {
         handle = mock(UsbCommunicationHandle.class);
+    }
+
+    @Test(expected = NoUsbDevicesFoundException.class)
+    public void newJblinky() throws Exception {
+        new JBlinky();
+    }
+
+    @Test(expected = NoUsbDevicesFoundException.class)
+    public void newJBlinkyWithPackage() throws Exception {
+        new JBlinky("some.package");
+    }
+
+    @Test(expected = NoUsbDevicesFoundException.class)
+    public void newJBlinkyWithDeviceRegistries() throws Exception {
+        List<Class<? extends UsbLight>> deviceSpecs = new ArrayList<>();
+        new JBlinky(deviceSpecs);
     }
 
     @Test
