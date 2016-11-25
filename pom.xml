@@ -7,7 +7,7 @@
     <groupId>com.rastadrian</groupId>
     <artifactId>jblinky</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>${project.version}</version>
 
     <name>jBlinky</name>
     <description>jBlinky is an easy-to-configure Java library to set up CI build lights.</description>
@@ -42,10 +42,11 @@
     </modules>
 
     <properties>
-        <powermock.version>1.6.5</powermock.version>
+        <project.version>0.1.0-SNAPSHOT</project.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+        <powermock.version>1.6.5</powermock.version>
     </properties>
 
     <dependencyManagement>

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>jblinky</artifactId>
         <groupId>com.rastadrian</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${project.version}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,7 +15,7 @@
         <dependency>
             <groupId>com.rastadrian</groupId>
             <artifactId>jblinky-core</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
