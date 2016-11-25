@@ -1,7 +1,7 @@
 # jBlinky
 [![Build Status](https://travis-ci.org/rastadrian/jblinky.svg?branch=develop)](https://travis-ci.org/rastadrian/jblinky) [![Coverage Status](https://coveralls.io/repos/github/rastadrian/jblinky/badge.svg?branch=develop)](https://coveralls.io/github/rastadrian/jblinky?branch=develop) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
 
-jBlinky is an easy-to-configure Java library to set up CI build lights. It started as a Java port of the [blinky](https://github.com/perryn/blinky) project.
+jBlinky is an easy-to-configure Java library to set up CI build lights. It started as a Java port of [Perryn Fowler](https://github.com/perryn)'s [blinky](https://github.com/perryn/blinky) project.
 
 The library is not only tied to CI job builds however, it also provides different types of `Probe` implementations and allows you to create your own!
 
@@ -18,12 +18,20 @@ Needless to say, you are always able to create, provide and use your own [custom
 
 ## How to use?
 
-Just create a new `jBlinky` object and provide the `Probes` that you want to monitor.
+Just create a new `jBlinky` object, access one of the lights and use them! 
 
 ```java
+//Creates a new blinky, retrieves the first connected light and blinks between red and green.
+new JBlinky().getLight().test();
+```
 
+You can also provide the `Probes` that you want to monitor.
+
+```java
 //Creates a new blinky and verifies a single job on a Jenkins Cruise Control Tray.
-new JBlinky().getLight().verifyProbes(new CCTrayProbe("https://yourdomain/jenkins/cc.xml", new String[] {"job-name"}));
+Probe probe = new CCTrayProbe("https://yourdomain/jenkins/cc.xml", new String[] {"job-name"});
+Light light = new JBlinky().getLight();
+light.verifyProbes(probe);
 ```
 
 Please visit the [jBlinky & Lights Wiki](https://github.com/rastadrian/jblinky/wiki/jBlinky-&-Lights) page for more detailed use cases!
