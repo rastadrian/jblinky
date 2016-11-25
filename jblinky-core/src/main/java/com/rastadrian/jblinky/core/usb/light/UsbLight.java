@@ -27,6 +27,7 @@ public abstract class UsbLight extends UsbDevice implements Light {
     private Probe[] probes;
     private State currentState;
     private int warningCounter;
+    private int waitTimeInSeconds = 8;
 
     public UsbLight() {
         scheduler = Executors.newScheduledThreadPool(1);
@@ -50,23 +51,21 @@ public abstract class UsbLight extends UsbDevice implements Light {
 
     @Override
     public void verifyProbes(final ProbeCallback callback) {
-        performScheduledTask(new Runnable() {
-            public void run() {
-                Map<String, Status> statuses = new HashMap<String, Status>();
-                for (Probe probe : probes) {
-                    warningCounter = 3;
-                    boolean shouldRepeat;
-                    do {
-                        Status status = probe.verify();
-                        shouldRepeat = handleState(status.getState());
-                        currentState = status.getState();
-                        statuses.put(probe.getName(), status);
-                        if (callback != null) {
-                            callback.onProbesUpdated(statuses);
-                        }
-                        sleep(1);
-                    } while (shouldRepeat);
-                }
+        performScheduledTask(() -> {
+            Map<String, Status> statuses = new HashMap<>();
+            for (Probe probe : probes) {
+                warningCounter = 3;
+                boolean shouldRepeat;
+                do {
+                    Status status = probe.verify();
+                    shouldRepeat = handleState(status.getState());
+                    currentState = status.getState();
+                    statuses.put(probe.getName(), status);
+                    if (callback != null) {
+                        callback.onProbesUpdated(statuses);
+                    }
+                    sleep(waitTimeInSeconds);
+                } while (shouldRepeat);
             }
         });
     }
@@ -104,6 +103,14 @@ public abstract class UsbLight extends UsbDevice implements Light {
     public void disconnect() {
         off();
         super.disconnect();
+    }
+
+    /**
+     * Sets the wait time between probe verifications.
+     * @param waitTimeInSeconds the time to wait in seconds.
+     */
+    public void setWaitTimeInSeconds(int waitTimeInSeconds) {
+        this.waitTimeInSeconds = waitTimeInSeconds;
     }
 
     /**
