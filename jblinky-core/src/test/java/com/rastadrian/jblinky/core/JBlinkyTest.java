@@ -81,7 +81,11 @@ public class JBlinkyTest {
             firstLight = new TestLightDevice();
             secondLight = new TestLightDevice();
             mockHandleConnectedUsbLights(firstLight, secondLight);
-            jBlinky = new JBlinky(handle);
+
+            List<Class<? extends UsbLight>> specs = new ArrayList<>();
+            specs.add(TestLightDevice.class);
+
+            jBlinky = new JBlinky(handle, specs);
         }
         when:
         {
@@ -104,7 +108,11 @@ public class JBlinkyTest {
             secondLight = new TestLightDevice();
             secondLight.setHandle(handle);
             mockHandleConnectedUsbLights(firstLight, secondLight);
-            jBlinky = new JBlinky(handle);
+
+            List<Class<? extends UsbLight>> specs = new ArrayList<>();
+            specs.add(TestLightDevice.class);
+
+            jBlinky = new JBlinky(handle, specs);
         }
         when:
         {

@@ -1,5 +1,6 @@
 package com.rastadrian.jblinky.core.usb.light;
 
+import com.rastadrian.jblinky.core.usb.DeviceRegister;
 import com.rastadrian.jblinky.core.usb.UsbCommunicationHandle;
 import com.rastadrian.jblinky.core.usb.UsbDevice;
 import org.junit.Before;
@@ -34,7 +35,9 @@ public class LightFactoryTest {
         UsbLightDevice lightDevice;
         given:
         {
-            lightFactory = new LightFactory(null, handle);
+            List<DeviceRegister> deviceRegisters = new ArrayList<>();
+            deviceRegisters.add(new DeviceRegister((short) 1, (short) 2, TestUsbLight.class));
+            lightFactory = new LightFactory(deviceRegisters, handle);
             lightDevice = new UsbLightDevice();
             List<UsbDevice> deviceList = new ArrayList<UsbDevice>();
             deviceList.add(lightDevice);
@@ -53,7 +56,7 @@ public class LightFactoryTest {
     }
 
 
-    @Test(expected = NonUsbLightFoundException.class)
+    @Test(expected = NoUsbDevicesFoundException.class)
     public void detectLights_withNonLightRegistries() throws Exception {
         given:
         {

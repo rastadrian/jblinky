@@ -33,7 +33,7 @@ public class LightFactory {
      */
     public List<Light> detectLights() {
         List<Light> lights = new ArrayList<>();
-        if(deviceRegisters.isEmpty()) {
+        if(deviceRegisters == null || deviceRegisters.isEmpty()) {
             LOGGER.error("No USB specifications were provided..");
             throw new NoUsbDevicesFoundException();
         }
