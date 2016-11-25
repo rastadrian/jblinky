@@ -33,6 +33,10 @@ public class LightFactory {
      */
     public List<Light> detectLights() {
         List<Light> lights = new ArrayList<>();
+        if(deviceRegisters.isEmpty()) {
+            LOGGER.error("No USB specifications were provided..");
+            throw new NoUsbDevicesFoundException();
+        }
         List<UsbDevice> usbDevices = handle.getConnectedUsbLights(deviceRegisters);
         if (usbDevices.isEmpty()) {
             LOGGER.error("No compatible USB devices were found.");
