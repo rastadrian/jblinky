@@ -9,6 +9,8 @@ For use cases, documentation and more details, please visit the [jBlinky Wiki](h
 
 This project started as a Java port of [Perryn Fowler](https://github.com/perryn)'s [blinky](https://github.com/perryn/blinky).
 
+![jBlinky](https://raw.github.com/rastadrian/jblinky/develop/jblinky.jpg)
+
 ## Getting started
 
 The project is contained in three main modules: 
