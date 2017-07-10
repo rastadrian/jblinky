@@ -37,7 +37,7 @@ public class CCTrayProbe implements Probe {
 
     /**
      * Creates an authenticated CCTray Probe that monitors the provided jobs.
-     *
+     * @param builder the Probe's builder.
      */
     private CCTrayProbe(Builder builder) {
         LOGGER.info("Creating CCTray Probe [{}]", builder.name);
@@ -49,6 +49,7 @@ public class CCTrayProbe implements Probe {
         this.networkHandle = new NetworkHandle(createCCTrayNetworkOperator());
     }
 
+    @Override
     public String getName() {
         return name;
     }
@@ -67,6 +68,10 @@ public class CCTrayProbe implements Probe {
                 .forEach(light -> probeLightHandler.accept(status.getState(), light));
 
         return status;
+    }
+
+    public void setNetworkHandle(NetworkHandle networkHandle) {
+        this.networkHandle = networkHandle;
     }
 
     private RestOperations createCCTrayNetworkOperator() {
@@ -106,47 +111,68 @@ public class CCTrayProbe implements Probe {
         return new Status(state, messages.toArray(new String[messages.size()]));
     }
 
-    public void setNetworkHandle(NetworkHandle networkHandle) {
-        this.networkHandle = networkHandle;
-    }
-
+    /**
+     * @return the <code>Probe</code>'s builder.
+     */
     public static Builder builder() {
         return new Builder();
     }
 
+    /**
+     * The CCTrayProbe's builder.
+     */
     public static class Builder {
         private String name;
         private String url;
         private String username;
         private String password;
         private String[] jobs;
-        private NetworkHandle networkHandle;
 
         private Builder() {
             //NOP
         }
 
+        /**
+         * @param name the Probe's name
+         * @return the builder's instance.
+         */
         public Builder withName(String name) {
             this.name = name;
             return this;
         }
 
+        /**
+         * @param username the tray's credential's username
+         * @param password the tray's credential's password
+         * @return the builder's instance.
+         */
         public Builder withCredentials(String username, String password) {
             this.username = username;
             this.password = password;
             return this;
         }
 
+        /**
+         * @param jobs the job names that should be verified.
+         * @return the builder's instance.
+         */
         public Builder withJobs(String... jobs) {
             this.jobs = jobs;
             return this;
         }
 
+        /**
+         * @param url the URL for the cruise control tray's xml.
+         * @return the builder's instance.
+         */
         public Builder withUrl(String url) {
             this.url = url;
             return this;
         }
 
+        /**
+         * @return a <code>CCTrayProbe</code> instance.
+         */
         public CCTrayProbe build() {
             if (this.name == null) {
                 this.name = String.format(DEFAULT_NAME_FORMAT, url);

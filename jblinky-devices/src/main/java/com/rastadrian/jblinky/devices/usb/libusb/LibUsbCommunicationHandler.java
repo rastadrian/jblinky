@@ -19,6 +19,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * A USB communication handler that uses <a href="http://usb4java.org/quickstart/libusb.html">usb4java</a> as an implementation
+ * to read and write to usb devices.
+ * <p>
  * Created on 7/8/17.
  *
  * @author Adrian Pena

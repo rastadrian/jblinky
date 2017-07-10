@@ -9,6 +9,7 @@ import com.rastadrian.jblinky.core.light.Light;
  * @author Adrian Pena
  */
 public interface Probe {
+
     /**
      * A unique name for the probe.
      *
@@ -17,8 +18,10 @@ public interface Probe {
     String getName();
 
     /**
-     * Performs the verification of the probe. The process has to be synchronous and has to be return a {@link Status} report.
-     * @param lights the lights to react
+     * Performs the verification of the probe. {@link Light}s might be given as a parameter and they will react towards
+     * the result of the Probe.
+     *
+     * @param lights the lights that should react towards the probe.
      * @return the {@link Status} report of the verification.
      */
     Status verify(Light... lights);

@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.function.BiConsumer;
 
 /**
+ * A handler that allows a {@link Light} to consume a Probe's {@link State}.
  * Created on 7/6/17.
  *
  * @author Adrian Pena

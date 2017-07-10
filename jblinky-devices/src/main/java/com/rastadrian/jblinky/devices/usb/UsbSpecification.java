@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that a class is a USB device specification. It is required that the class extends {@link UsbLight}.
+ * Indicates that a class is a USB device. This annotation is required for any class that extends {@link UsbLight}.
  * <p>
  * A USB Device provides manufacturing information such as the vendor and product identifiers which allows the scanning
  * and detection of connected usb lights from a computer.
@@ -16,6 +16,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(value = RetentionPolicy.RUNTIME)
 public @interface UsbSpecification {
+
     /**
      * The USB vendor identifier.
      *

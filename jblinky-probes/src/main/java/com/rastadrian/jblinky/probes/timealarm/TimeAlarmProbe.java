@@ -25,6 +25,8 @@ public class TimeAlarmProbe implements Probe {
     /**
      * Create a new Time Alarm Probe that will trigger at the provided hours:minutes. When the alarm triggers,
      * it will return the provided alarmMessage as part of the Probe {@link Status}.
+     *
+     * @param builder the Probe's builder.
      */
     private TimeAlarmProbe(Builder builder) {
         LOGGER.info("Creating TimeAlarm Probe [{}]", builder.name);
@@ -34,10 +36,12 @@ public class TimeAlarmProbe implements Probe {
         this.name = builder.name;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public Status verify(Light... lights) {
         LOGGER.debug("TimeAlarm Probe [{}]: Verifying probe...", name);
         Status status = doVerify();
@@ -61,10 +65,16 @@ public class TimeAlarmProbe implements Probe {
         return new Status(State.SUCCESS, new String[]{String.format("Alarm not triggered. Current time [%s:%s]", hourOfDay, minuteOfDay)});
     }
 
+    /**
+     * @return the <code>Probe</code>'s builder.
+     */
     public static Builder builder() {
         return new Builder();
     }
 
+    /**
+     * The TimeAlarmProbe's builder.
+     */
     public static class Builder {
         private int hours;
         private int minutes;
@@ -75,22 +85,39 @@ public class TimeAlarmProbe implements Probe {
             //NOP
         }
 
+        /**
+         * This hour value should be in 24 hour format.
+         * @param hours the alarm's hours
+         * @param minutes the alarm's minutes
+         * @return the builder's instance.
+         */
         public Builder withTime(int hours, int minutes) {
             this.hours = hours;
             this.minutes = minutes;
             return this;
         }
 
+        /**
+         * @param message the message that should be returned when the alarm triggers.
+         * @return the builder's instance.
+         */
         public Builder withMessage(String message) {
             this.message = message;
             return this;
         }
 
+        /**
+         * @param name the Probe's name
+         * @return the builder's instance.
+         */
         public Builder withName(String name) {
             this.name = name;
             return this;
         }
 
+        /**
+         * @return a <code>TimeAlarmProbe</code>'s instance.
+         */
         public TimeAlarmProbe build() {
             if (this.name == null) {
                 this.name = String.format("Time Alarm Probe @ %s:%s", hours, minutes);

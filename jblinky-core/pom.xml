@@ -18,16 +18,6 @@
             <version>1.16.16</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.usb4java</groupId>
-            <artifactId>usb4java</artifactId>
-            <version>1.2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-            <version>0.9.10</version>
-        </dependency>
 
         <!--Test Dependencies -->
 

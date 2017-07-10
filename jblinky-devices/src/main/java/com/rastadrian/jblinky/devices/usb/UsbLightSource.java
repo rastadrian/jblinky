@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 /**
+ * A Light Source that reads from the computer's connected USB dock.
  * Created on 6/29/17.
  *
  * @author Adrian Pena
@@ -37,10 +38,16 @@ public class UsbLightSource implements LightSource {
         return lights;
     }
 
+    /**
+     * @return the {@link UsbLightSource} builder.
+     */
     public static Builder builder() {
         return new Builder();
     }
 
+    /**
+     * A <code>UsbLightSource</code> builder.
+     */
     public static class Builder {
         private Class<? extends UsbLight>[] usbLightSpecs;
         private UsbCommunicationsHandler usbHandler = new LibUsbCommunicationHandler();
@@ -49,17 +56,32 @@ public class UsbLightSource implements LightSource {
             //NOP
         }
 
+        /**
+         * This classes should be annotated with {@link UsbSpecification}.
+         *
+         * @param lightSpecs one or more {@link UsbLight} implementation classes.
+         * @return the builder's instance.
+         */
         @SafeVarargs
         public final Builder withUsbLightSpecs(Class<? extends UsbLight>... lightSpecs) {
             this.usbLightSpecs = lightSpecs;
             return this;
         }
 
+        /**
+         * If this is not specified, the default {@link LibUsbCommunicationHandler} is provided.
+         *
+         * @param handler a UsbCommunicationsHandler implementation.
+         * @return the builder's instance.
+         */
         public Builder withUsbHandler(UsbCommunicationsHandler handler) {
             this.usbHandler = handler;
             return this;
         }
 
+        /**
+         * @return an <code>UsbLightSource</code> instance.
+         */
         public UsbLightSource build() {
             return new UsbLightSource(this);
         }

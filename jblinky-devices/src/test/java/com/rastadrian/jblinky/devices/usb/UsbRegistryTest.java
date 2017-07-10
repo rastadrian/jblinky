@@ -16,7 +16,7 @@ public class UsbRegistryTest {
     public void matchesDeviceWithValidDevice() throws Exception {
         //Given
         short vendorId = 0x5;
-        short productId  = 0x6;
+        short productId = 0x6;
         usbRegistry = new UsbRegistry(vendorId, productId, UsbLight.class);
 
         //When
@@ -30,7 +30,7 @@ public class UsbRegistryTest {
     public void matchesDeviceWithInvalidDevice() throws Exception {
         //Given
         short vendorId = 0x5;
-        short productId  = 0x6;
+        short productId = 0x6;
         usbRegistry = new UsbRegistry(vendorId, productId, UsbLight.class);
 
         //When
@@ -44,7 +44,7 @@ public class UsbRegistryTest {
     public void getDeviceClass() throws Exception {
         //Given
         short vendorId = 0x5;
-        short productId  = 0x6;
+        short productId = 0x6;
         usbRegistry = new UsbRegistry(vendorId, productId, UsbLight.class);
 
         //When

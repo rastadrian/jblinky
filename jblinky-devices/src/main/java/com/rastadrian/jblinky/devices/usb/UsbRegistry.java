@@ -31,6 +31,9 @@ public class UsbRegistry {
         return this.vendorId == vendorId && this.productId == productId;
     }
 
+    /**
+     * @return the UsbLight class associated with this registry.
+     */
     public Class<? extends UsbLight> getDeviceClass() {
         return deviceClass;
     }

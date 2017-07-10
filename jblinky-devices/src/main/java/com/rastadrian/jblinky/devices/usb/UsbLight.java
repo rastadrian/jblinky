@@ -4,13 +4,9 @@ import com.rastadrian.jblinky.core.light.BaseLight;
 import com.rastadrian.jblinky.core.light.Light;
 import com.rastadrian.jblinky.core.light.LightSource;
 import lombok.extern.slf4j.Slf4j;
-import org.usb4java.DeviceHandle;
-import org.usb4java.LibUsb;
-import org.usb4java.LibUsbException;
-
-import java.nio.ByteBuffer;
 
 /**
+ * A {@link Light} that communicates via USB.
  * Created on 6/29/17.
  *
  * @author Adrian Pena
@@ -31,6 +27,11 @@ public abstract class UsbLight extends BaseLight {
         return this.lightSource;
     }
 
+    /**
+     * The {@link Light}'s means to communicate to the actual device.
+     *
+     * @param usbCommunicationsHandler the communications handler.
+     */
     public void setHandler(UsbCommunicationsHandler usbCommunicationsHandler) {
         this.usbCommunicationsHandler = usbCommunicationsHandler;
     }

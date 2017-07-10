@@ -1,6 +1,8 @@
 package com.rastadrian.jblinky.core.light;
 
 /**
+ * A default light that maintains the state of the light's interactions.
+ *
  * Created on 7/6/17.
  *
  * @author Adrian Pena

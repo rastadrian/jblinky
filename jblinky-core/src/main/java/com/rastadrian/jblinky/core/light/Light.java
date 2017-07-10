@@ -7,10 +7,21 @@ package com.rastadrian.jblinky.core.light;
  */
 public interface Light {
 
+    /**
+     * Defined as a {@link LightState}, the default value is {@link LightState#OFF}
+     * @return the current light's state.
+     */
     LightState getState();
 
+    /**
+     * @return the light's source where it was "discovered" from.
+     */
     LightSource getSource();
 
+    /**
+     * This identifier may not be unique.
+     * @return a text identifier.
+     */
     String getId();
 
     /**

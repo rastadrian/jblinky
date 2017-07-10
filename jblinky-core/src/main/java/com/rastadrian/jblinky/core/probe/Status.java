@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * A Probe test status.
+ * A Probe Status, this is returned when a Probe is verified.
  *
  * @author Adrian Pena
  */

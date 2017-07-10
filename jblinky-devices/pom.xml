@@ -24,6 +24,11 @@
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.usb4java</groupId>
+            <artifactId>usb4java</artifactId>
+            <version>1.2.0</version>
+        </dependency>
 
         <!--Test Dependencies -->
 

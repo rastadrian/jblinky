@@ -4,7 +4,6 @@ import com.rastadrian.jblinky.core.light.Light;
 import org.junit.Test;
 
 import java.util.Collection;
-import java.util.Collections;
 
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;

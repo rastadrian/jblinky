@@ -36,31 +36,31 @@ public class WebMailNotifier extends UsbLight {
             return;
         }
         super.success();
-        sendColor(new byte[]{0x00, (byte) 0xFF, 0x00});
+        setColor(new byte[]{0x00, (byte) 0xFF, 0x00});
     }
 
     @Override
     public void failure() {
         super.failure();
-        sendColor(new byte[]{(byte) 0xFF, 0x00, 0x00});
+        setColor(new byte[]{(byte) 0xFF, 0x00, 0x00});
     }
 
     @Override
     public void inProgress() {
         super.inProgress();
-        sendColor(new byte[]{0x00, 0x00, (byte) 0xFF});
+        setColor(new byte[]{0x00, 0x00, (byte) 0xFF});
     }
 
     @Override
     public void warning() {
         super.warning();
-        sendColor(new byte[]{(byte) 0xFF, 0x2A, 0x00});
+        setColor(new byte[]{(byte) 0xFF, 0x2A, 0x00});
     }
 
     @Override
     public void off() {
         super.off();
-        sendColor(new byte[]{0x00, 0x00, 0x00});
+        setColor(new byte[]{0x00, 0x00, 0x00});
     }
 
     @Override
@@ -88,7 +88,7 @@ public class WebMailNotifier extends UsbLight {
         return 0;
     }
 
-    private void sendColor(byte[] color) {
+    private void setColor(byte[] color) {
         byte[] suffix = new byte[]{0x00, 0x00, 0x00, 0x00, 0x05};
         communicate(ArrayUtils.addAll(color, suffix));
     }
