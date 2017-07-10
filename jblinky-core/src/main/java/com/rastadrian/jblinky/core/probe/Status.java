@@ -1,10 +1,19 @@
 package com.rastadrian.jblinky.core.probe;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 /**
- * A Probe status report.
+ * A Probe test status.
  *
  * @author Adrian Pena
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Status {
     /**
      * The probe state after verification.
@@ -15,28 +24,4 @@ public class Status {
      * An optional list of messages from the probe.
      */
     private String[] messages;
-
-    public Status() {
-    }
-
-    public Status(State state, String[] messages) {
-        this.state = state;
-        this.messages = messages;
-    }
-
-    public State getState() {
-        return state;
-    }
-
-    public void setState(State state) {
-        this.state = state;
-    }
-
-    public String[] getMessages() {
-        return messages;
-    }
-
-    public void setMessages(String[] messages) {
-        this.messages = messages;
-    }
 }

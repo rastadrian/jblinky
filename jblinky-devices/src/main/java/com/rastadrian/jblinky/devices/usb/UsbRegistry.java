@@ -1,20 +1,20 @@
-package com.rastadrian.jblinky.core.usb;
+package com.rastadrian.jblinky.devices.usb;
 
 import com.rastadrian.jblinky.core.JBlinky;
 
 /**
- * A usb device specification register. When {@link UsbRegistry} annotated {@link UsbDevice} classes
+ * A usb device specification register. When {@link UsbSpecification} annotated {@link UsbLight} classes
  * are provided to the {@link JBlinky}, this register provides the information required to scan and find
  * usb devices connected to the computer.
  *
  * @author Adrian Pena
  */
-public class DeviceRegister {
+public class UsbRegistry {
     private final short vendorId;
     private final short productId;
-    private final Class<? extends UsbDevice> deviceClass;
+    private final Class<? extends UsbLight> deviceClass;
 
-    public DeviceRegister(short vendorId, short productId, Class<? extends UsbDevice> deviceClass) {
+    public UsbRegistry(short vendorId, short productId, Class<? extends UsbLight> deviceClass) {
         this.vendorId = vendorId;
         this.productId = productId;
         this.deviceClass = deviceClass;
@@ -27,11 +27,11 @@ public class DeviceRegister {
      * @param productId the productId to verify.
      * @return true if the device matches, false otherwise.
      */
-    boolean matchesDevice(short vendorId, short productId) {
+    public boolean matchesDevice(short vendorId, short productId) {
         return this.vendorId == vendorId && this.productId == productId;
     }
 
-    Class<? extends UsbDevice> getDeviceClass() {
+    public Class<? extends UsbLight> getDeviceClass() {
         return deviceClass;
     }
 }

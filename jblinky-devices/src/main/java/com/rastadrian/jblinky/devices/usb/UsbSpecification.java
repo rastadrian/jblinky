@@ -1,4 +1,4 @@
-package com.rastadrian.jblinky.core.usb;
+package com.rastadrian.jblinky.devices.usb;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that a class is a USB Device. It is required that the class extends {@link UsbDevice}.
+ * Indicates that a class is a USB device specification. It is required that the class extends {@link UsbLight}.
  * <p>
  * A USB Device provides manufacturing information such as the vendor and product identifiers which allows the scanning
  * and detection of connected usb lights from a computer.
@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.TYPE)
 @Retention(value = RetentionPolicy.RUNTIME)
-public @interface UsbRegistry {
+public @interface UsbSpecification {
     /**
      * The USB vendor identifier.
      *

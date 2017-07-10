@@ -24,76 +24,75 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Calendar.class, TimeAlarmProbe.class})
 public class TimeAlarmProbeTest {
+
     @Test
     public void getName_withDefaultName() throws Exception {
-        String name;
-        Probe probe;
-        given: {
-            probe = new TimeAlarmProbe(10,15, "Alarm message");
-        }
-        when: {
-            name = probe.getName();
-        }
-        then: {
-            assertThat(name).isEqualTo("Time Alarm Probe @ 10:15");
-        }
+        //Given
+        Probe probe = TimeAlarmProbe.builder().withTime(10, 15)
+                .withMessage("Alarm message")
+                .build();
+
+        //When
+        String name = probe.getName();
+
+        //Then
+        assertThat(name).isEqualTo("Time Alarm Probe @ 10:15");
     }
 
     @Test
     public void getName_withCustomName() throws Exception {
-        String name;
-        Probe probe;
-        String receivedName;
+        //Given
+        String name = "Custom Name";
+        Probe probe = TimeAlarmProbe.builder()
+                .withName(name)
+                .withTime(10, 15)
+                .withMessage("Alarm message")
+                .build();
 
-        given: {
-            name = "Custom Name";
-            probe = new TimeAlarmProbe(name, 10,15, "Alarm message");
-        }
-        when: {
-            receivedName = probe.getName();
-        }
-        then: {
-            assertThat(receivedName).isEqualTo(name);
-        }
+        //When
+        String receivedName = probe.getName();
+
+        //Then
+        assertThat(receivedName).isEqualTo(name);
     }
 
     @Test
     public void verify_withDifferentTime() throws Exception {
-        TimeAlarmProbe probe;
-        Status statusReport;
-        given: {
-            mockCalendarToReturnTime(11,16);
-            probe = new TimeAlarmProbe(10,15, "Alarm message");
-        }
-        when: {
-            statusReport = probe.verify();
-        }
-        then: {
-            assertThat(statusReport).isNotNull();
-            assertThat(statusReport.getState()).isEqualTo(State.SUCCESS);
-            assertThat(statusReport.getMessages()).isNotEmpty();
-            assertThat(statusReport.getMessages()[0]).isEqualTo("Alarm not triggered. Current time [11:16]");
-        }
+        //Given
+        mockCalendarToReturnTime(11, 16);
+        TimeAlarmProbe probe = TimeAlarmProbe.builder()
+                .withTime(10, 15)
+                .withMessage("Alarm message")
+                .build();
+
+        //When
+        Status statusReport = probe.verify();
+
+        //Then
+        assertThat(statusReport).isNotNull();
+        assertThat(statusReport.getState()).isEqualTo(State.SUCCESS);
+        assertThat(statusReport.getMessages()).isNotEmpty();
+        assertThat(statusReport.getMessages()[0]).isEqualTo("Alarm not triggered. Current time [11:16]");
     }
 
     @Test
     public void verify_withSameTime() throws Exception {
-        TimeAlarmProbe probe;
-        Status statusReport;
+        //Given
         String alarmMessage = "Alarm message";
-        given: {
-            mockCalendarToReturnTime(10, 15);
-            probe = new TimeAlarmProbe(10,15, alarmMessage);
-        }
-        when: {
-            statusReport = probe.verify();
-        }
-        then: {
-            assertThat(statusReport).isNotNull();
-            assertThat(statusReport.getState()).isEqualTo(State.IN_PROGRESS);
-            assertThat(statusReport.getMessages()).isNotEmpty();
-            assertThat(statusReport.getMessages()[0]).isEqualTo(alarmMessage);
-        }
+        mockCalendarToReturnTime(10, 15);
+        TimeAlarmProbe probe = TimeAlarmProbe.builder()
+                .withMessage(alarmMessage)
+                .withTime(10, 15)
+                .build();
+
+        //When
+        Status statusReport = probe.verify();
+
+        //Then
+        assertThat(statusReport).isNotNull();
+        assertThat(statusReport.getState()).isEqualTo(State.IN_PROGRESS);
+        assertThat(statusReport.getMessages()).isNotEmpty();
+        assertThat(statusReport.getMessages()[0]).isEqualTo(alarmMessage);
     }
 
     private void mockCalendarToReturnTime(int hour, int minute) {
