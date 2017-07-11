@@ -5,10 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 /**
- * A CI Service Cruise Control Tray. This XML document provides the summary of a particular Project in a CI Server.
+ * A Cruise Control Tray project entry.
  *
  * @author Adrian Pena
  */
@@ -16,8 +14,9 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-class CCTray {
+class CCProject {
 
-    private List<CCProject> projects;
+    private String name;
 
+    private String lastBuildStatus;
 }

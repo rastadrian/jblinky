@@ -1,8 +1,7 @@
 package com.rastadrian.jblinky.probes.cctray;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -20,8 +19,8 @@ import java.util.List;
  *
  * @author Adrian Pena
  */
+@Slf4j
 class CCTrayParser {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CCTrayParser.class);
 
     /**
      * De-serializes a Cruise Control Tray.
@@ -46,7 +45,7 @@ class CCTrayParser {
     }
 
     private static class CCTrayHandler extends DefaultHandler {
-        private final List<Project> projects;
+        private final List<CCProject> projects;
 
         private CCTrayHandler() {
             projects = new ArrayList<>();
@@ -58,7 +57,7 @@ class CCTrayParser {
             if (StringUtils.equals(qName, "Project")) {
                 String name = attributes.getValue("name");
                 String lastBuildStatus = attributes.getValue("lastBuildStatus");
-                projects.add(new Project(name, lastBuildStatus));
+                projects.add(new CCProject(name, lastBuildStatus));
             }
         }
 

@@ -1,20 +1,18 @@
 package com.rastadrian.jblinky.core;
 
-import com.rastadrian.jblinky.core.usb.UsbCommunicationHandle;
-import com.rastadrian.jblinky.core.usb.UsbDevice;
-import com.rastadrian.jblinky.core.usb.UsbRegistry;
-import com.rastadrian.jblinky.core.usb.light.Light;
-import com.rastadrian.jblinky.core.usb.light.NoUsbDevicesFoundException;
-import com.rastadrian.jblinky.core.usb.light.UsbLight;
-import org.junit.Before;
+import com.rastadrian.jblinky.core.light.Light;
+import com.rastadrian.jblinky.core.light.LightSource;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.Collections;
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Created on 9/24/16.
@@ -23,159 +21,40 @@ import static org.mockito.Mockito.*;
  */
 public class JBlinkyTest {
 
-    private JBlinky jBlinky;
-    private UsbCommunicationHandle handle;
-
-    @Before
-    public void setUp() throws Exception {
-        handle = mock(UsbCommunicationHandle.class);
-    }
-
-    @Test(expected = NoUsbDevicesFoundException.class)
-    public void newJblinky() throws Exception {
-        new JBlinky();
-    }
-
-    @Test(expected = NoUsbDevicesFoundException.class)
-    public void newJBlinkyWithPackage() throws Exception {
-        new JBlinky("some.package");
-    }
-
-    @Test(expected = NoUsbDevicesFoundException.class)
-    public void newJBlinkyWithDeviceRegistries() throws Exception {
-        List<Class<? extends UsbLight>> deviceSpecs = new ArrayList<>();
-        new JBlinky(deviceSpecs);
-    }
-
     @Test
-    public void getLight() throws Exception {
-        TestLightDevice firstLight;
-        TestLightDevice secondLight;
-        Light light;
-        given:
-        {
-            firstLight = new TestLightDevice();
-            secondLight = new TestLightDevice();
-            mockHandleConnectedUsbLights(firstLight, secondLight);
-            List<Class<? extends UsbLight>> lightSpecs = new ArrayList<Class<? extends UsbLight>>();
-            lightSpecs.add(TestLightDevice.class);
-            jBlinky = new JBlinky(handle, lightSpecs);
-        }
-        when:
-        {
-            light = jBlinky.getLight();
-        }
-        then:
-        {
-            assertThat(light).isEqualTo(firstLight);
-        }
+    public void jBlinkyWithLightSource() throws Exception {
+        //given
+        Light light = mock(Light.class);
+        LightSource source = mock(LightSource.class);
+        Collection<? extends Light> lights = Collections.singletonList(light);
+        doReturn(lights).when(source).getLights();
+
+        //when
+        JBlinky jBlinky = JBlinky.builder()
+                .withLightSources(source)
+                .build();
+
+        //then
+        assertThat(jBlinky.getLight()).isNotNull().isEqualTo(light);
+        assertThat(jBlinky.getLights()).contains(light);
+        verify(source, times(1)).getLights();
     }
 
-    @Test
-    public void getLights() throws Exception {
-        TestLightDevice firstLight;
-        TestLightDevice secondLight;
-        List<Light> lights;
-        given:
-        {
-            firstLight = new TestLightDevice();
-            secondLight = new TestLightDevice();
-            mockHandleConnectedUsbLights(firstLight, secondLight);
+    @Test(expected = JBlinkyException.class)
+    public void jBlinkyWithNoLightsFound() throws Exception {
+        //given
+        LightSource source = mock(LightSource.class);
+        when(source.getLights()).thenReturn(Collections.emptyList());
 
-            List<Class<? extends UsbLight>> specs = new ArrayList<>();
-            specs.add(TestLightDevice.class);
-
-            jBlinky = new JBlinky(handle, specs);
-        }
-        when:
-        {
-            lights = jBlinky.getLights();
-        }
-        then:
-        {
-            assertThat(lights).contains(firstLight, secondLight);
-        }
+        //when
+        JBlinky.builder()
+                .withLightSources(source)
+                .build();
     }
 
-    @Test
-    public void close() throws Exception {
-        TestLightDevice firstLight;
-        TestLightDevice secondLight;
-        given:
-        {
-            firstLight = spy(new TestLightDevice());
-            firstLight.setHandle(handle);
-            secondLight = new TestLightDevice();
-            secondLight.setHandle(handle);
-            mockHandleConnectedUsbLights(firstLight, secondLight);
-
-            List<Class<? extends UsbLight>> specs = new ArrayList<>();
-            specs.add(TestLightDevice.class);
-
-            jBlinky = new JBlinky(handle, specs);
-        }
-        when:
-        {
-            assertThat(jBlinky.getLights()).contains(firstLight, secondLight);
-            jBlinky.close();
-        }
-        then:
-        {
-            assertThat(jBlinky.getLights()).isEmpty();
-            verify(firstLight, times(1)).disconnect();
-        }
-    }
-
-    private void mockHandleConnectedUsbLights(UsbDevice... devices) {
-        List<UsbDevice> usbList = new ArrayList<UsbDevice>();
-        for (UsbDevice device : devices) {
-            usbList.add(device);
-        }
-        handle = mock(UsbCommunicationHandle.class);
-        when(handle.getConnectedUsbLights(any(List.class))).thenReturn(usbList);
-    }
-
-    @UsbRegistry(vendorId = 0, productId = 1)
-    private static class TestLightDevice extends UsbLight {
-
-        public void success() {
-
-        }
-
-        public void failure() {
-
-        }
-
-        public void inProgress() {
-
-        }
-
-        public void warning() {
-
-        }
-
-        public void off() {
-
-        }
-
-        protected byte getRequestType() {
-            return 0;
-        }
-
-        protected byte getRequest() {
-            return 0;
-        }
-
-        protected short getValue() {
-            return 0;
-        }
-
-        protected short getIndex() {
-            return 0;
-        }
-
-        protected long getTimeout() {
-            return 0;
-        }
+    @Test(expected = JBlinkyException.class)
+    public void jBlinkyWithNoLightSources() throws Exception {
+        //when
+        JBlinky.builder().build();
     }
 }
