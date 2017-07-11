@@ -62,7 +62,7 @@ public class TimeAlarmProbe implements Probe {
             return new Status(State.IN_PROGRESS, new String[]{alarmMessage});
         }
         LOGGER.debug("TimeAlarm Probe [{}]: Current time [{}:{}] doesn't trigger alarm.", name, hourOfDay, minuteOfDay);
-        return new Status(State.SUCCESS, new String[]{String.format("Alarm not triggered. Current time [%s:%s]", hourOfDay, minuteOfDay)});
+        return new Status(State.SUCCESS, new String[]{"No alarm yet. ⏰"});
     }
 
     /**
@@ -87,7 +87,8 @@ public class TimeAlarmProbe implements Probe {
 
         /**
          * This hour value should be in 24 hour format.
-         * @param hours the alarm's hours
+         *
+         * @param hours   the alarm's hours
          * @param minutes the alarm's minutes
          * @return the builder's instance.
          */

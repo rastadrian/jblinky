@@ -46,7 +46,7 @@ public class CCTrayProbe implements Probe {
         this.password = builder.password;
         this.jobs = builder.jobs;
         this.name = builder.name;
-        this.networkHandle = new NetworkHandle(createCCTrayNetworkOperator());
+        this.networkHandle = builder.networkHandle;
     }
 
     @Override
@@ -70,18 +70,6 @@ public class CCTrayProbe implements Probe {
         return status;
     }
 
-    public void setNetworkHandle(NetworkHandle networkHandle) {
-        this.networkHandle = networkHandle;
-    }
-
-    private RestOperations createCCTrayNetworkOperator() {
-        RestTemplate restTemplate = new RestTemplate();
-        SimpleClientHttpRequestFactory factory = (SimpleClientHttpRequestFactory) restTemplate.getRequestFactory();
-        factory.setConnectTimeout(NETWORK_TIME_OUT_MILLIS);
-        factory.setReadTimeout(NETWORK_TIME_OUT_MILLIS);
-        return restTemplate;
-    }
-
     private Status doVerify() {
         HttpHeaders headers;
         List<String> messages = new ArrayList<String>();
@@ -96,16 +84,19 @@ public class CCTrayProbe implements Probe {
         CCTray ccTray = CCTrayParser.parseCCTray(content);
         if (ccTray == null) {
             LOGGER.warn("CCTray Probe [{}]: Unable to retrieve CCTray.", name);
-            return new Status(State.FAILURE, new String[]{"Unable to retrieve cc-tray."});
+            return new Status(State.FAILURE, new String[]{"Network failure. 🔌"});
         }
         for (CCProject project : ccTray.getProjects()) {
             if (ArrayUtils.contains(jobs, project.getName())) {
-                messages.add(String.format("Project: %s [%s]", project.getName(), project.getLastBuildStatus()));
                 if (!StringUtils.equals(project.getLastBuildStatus(), "Success")) {
                     LOGGER.debug("CCTray Probe [{}]: Project [{}] has non success status [{}]", name, project.getName(), project.getLastBuildStatus());
                     state = State.FAILURE;
+                    messages.add(project.getName() + " 🔥");
                 }
             }
+        }
+        if (state == State.SUCCESS) {
+            messages.add("All jobs are healthy. 👌");
         }
         LOGGER.debug("CCTray Probe [{}]: Verification complete, returning state [{}]", name, state);
         return new Status(state, messages.toArray(new String[messages.size()]));
@@ -127,6 +118,7 @@ public class CCTrayProbe implements Probe {
         private String username;
         private String password;
         private String[] jobs;
+        private NetworkHandle networkHandle = new NetworkHandle(createRestOperations());
 
         private Builder() {
             //NOP
@@ -170,6 +162,11 @@ public class CCTrayProbe implements Probe {
             return this;
         }
 
+        public Builder withNetworkHandle(NetworkHandle networkHandle) {
+            this.networkHandle = networkHandle;
+            return this;
+        }
+
         /**
          * @return a <code>CCTrayProbe</code> instance.
          */
@@ -178,6 +175,14 @@ public class CCTrayProbe implements Probe {
                 this.name = String.format(DEFAULT_NAME_FORMAT, url);
             }
             return new CCTrayProbe(this);
+        }
+
+        private RestOperations createRestOperations() {
+            RestTemplate restTemplate = new RestTemplate();
+            SimpleClientHttpRequestFactory factory = (SimpleClientHttpRequestFactory) restTemplate.getRequestFactory();
+            factory.setConnectTimeout(NETWORK_TIME_OUT_MILLIS);
+            factory.setReadTimeout(NETWORK_TIME_OUT_MILLIS);
+            return restTemplate;
         }
     }
 }

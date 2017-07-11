@@ -70,8 +70,7 @@ public class CCTrayProbeTest {
         //Given
         String jenkinsCCTray = TestUtil.readResource(this, "/cctray/jenkins-cctray-all-successful.xml");
         when(networkHandle.get(anyString(), eq(String.class), any(HttpHeaders.class))).thenReturn(jenkinsCCTray);
-        trayProbe = CCTrayProbe.builder().withUrl("url").withJobs("job1").build();
-        trayProbe.setNetworkHandle(networkHandle);
+        trayProbe = CCTrayProbe.builder().withUrl("url").withJobs("job1").withNetworkHandle(networkHandle).build();
 
         //When
         Status statusReport = trayProbe.verify();
@@ -86,23 +85,21 @@ public class CCTrayProbeTest {
         //Given
         String jenkinsCCTray = TestUtil.readResource(this, "/cctray/jenkins-cctray-job1-failure.xml");
         when(networkHandle.get(anyString(), eq(String.class), any(HttpHeaders.class))).thenReturn(jenkinsCCTray);
-        trayProbe = CCTrayProbe.builder().withUrl("url").withJobs("job1").build();
-        trayProbe.setNetworkHandle(networkHandle);
+        trayProbe = CCTrayProbe.builder().withUrl("url").withJobs("job1").withNetworkHandle(networkHandle).build();
 
         //When
         Status statusReport = trayProbe.verify();
 
         //Then
         assertThat(statusReport.getState()).isEqualTo(State.FAILURE);
-        assertThat(statusReport.getMessages()[0]).isEqualTo("Project: job1 [Failure]");
+        assertThat(statusReport.getMessages()[0]).isEqualTo("job1 \uD83D\uDD25");
     }
 
     @Test
     public void verify_anonymousCCTray_withNetworkFailure() throws Exception {
         //Given
         when(networkHandle.get(anyString(), eq(String.class), any(HttpHeaders.class))).thenReturn(null);
-        trayProbe = CCTrayProbe.builder().withUrl("url").withJobs("job1").build();
-        trayProbe.setNetworkHandle(networkHandle);
+        trayProbe = CCTrayProbe.builder().withUrl("url").withJobs("job1").withNetworkHandle(networkHandle).build();
         Light light = mock(Light.class);
 
         //When
@@ -110,7 +107,7 @@ public class CCTrayProbeTest {
 
         //Then
         assertThat(statusReport.getState()).isEqualTo(State.FAILURE);
-        assertThat(statusReport.getMessages()[0]).isEqualTo("Unable to retrieve cc-tray.");
+        assertThat(statusReport.getMessages()[0]).isEqualTo("Network failure. \uD83D\uDD0C");
         verify(light, times(1)).failure();
     }
 
@@ -123,8 +120,7 @@ public class CCTrayProbeTest {
         HttpHeaders authenticationHeaders = new HttpHeaders();
         when(networkHandle.createHeaders(eq(username), eq(password))).thenReturn(authenticationHeaders);
         when(networkHandle.get(anyString(), eq(String.class), eq(authenticationHeaders))).thenReturn(jenkinsCCTray);
-        trayProbe = CCTrayProbe.builder().withUrl("url").withJobs("job1").build();
-        trayProbe.setNetworkHandle(networkHandle);
+        trayProbe = CCTrayProbe.builder().withUrl("url").withJobs("job1").withNetworkHandle(networkHandle).build();
         Light light = mock(Light.class);
 
         //When

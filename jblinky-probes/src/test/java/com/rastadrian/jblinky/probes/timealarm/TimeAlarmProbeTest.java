@@ -72,7 +72,7 @@ public class TimeAlarmProbeTest {
         assertThat(statusReport).isNotNull();
         assertThat(statusReport.getState()).isEqualTo(State.SUCCESS);
         assertThat(statusReport.getMessages()).isNotEmpty();
-        assertThat(statusReport.getMessages()[0]).isEqualTo("Alarm not triggered. Current time [11:16]");
+        assertThat(statusReport.getMessages()[0]).isEqualTo("No alarm yet. ⏰");
     }
 
     @Test
